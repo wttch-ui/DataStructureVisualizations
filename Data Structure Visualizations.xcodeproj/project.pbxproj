@@ -21,7 +21,6 @@
 		49EA06A3280828BA004C3650 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA06A2280828BA004C3650 /* Constants.swift */; };
 		49EA06A528082972004C3650 /* ValueNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA06A428082972004C3650 /* ValueNode.swift */; };
 		49EA06A928091D01004C3650 /* CoordinateSpaceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA06A828091D01004C3650 /* CoordinateSpaceName.swift */; };
-		49EA06B028094E0C004C3650 /* ListNodeContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA06AF28094E0C004C3650 /* ListNodeContext.swift */; };
 		6C367822B3D09EEC84B293CF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6C36766150B73DE03D953EAC /* .gitignore */; };
 /* End PBXBuildFile section */
 
@@ -61,7 +60,6 @@
 		49EA06A2280828BA004C3650 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		49EA06A428082972004C3650 /* ValueNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueNode.swift; sourceTree = "<group>"; };
 		49EA06A828091D01004C3650 /* CoordinateSpaceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSpaceName.swift; sourceTree = "<group>"; };
-		49EA06AF28094E0C004C3650 /* ListNodeContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListNodeContext.swift; sourceTree = "<group>"; };
 		6C36766150B73DE03D953EAC /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,7 +159,6 @@
 		49EA069A2807F20A004C3650 /* Stack (Linked List Implementation) */ = {
 			isa = PBXGroup;
 			children = (
-				49EA06AF28094E0C004C3650 /* ListNodeContext.swift */,
 				49EA069C2807F36E004C3650 /* ListNode.swift */,
 				49EA069E280805B7004C3650 /* LinkArrow.swift */,
 				49EA06A028080F7F004C3650 /* StackLinkedListImplementation.swift */,
@@ -320,7 +317,6 @@
 				49EA069F280805B7004C3650 /* LinkArrow.swift in Sources */,
 				49EA06A928091D01004C3650 /* CoordinateSpaceName.swift in Sources */,
 				49EA06A3280828BA004C3650 /* Constants.swift in Sources */,
-				49EA06B028094E0C004C3650 /* ListNodeContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

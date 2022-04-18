@@ -30,19 +30,13 @@ struct StackLinkedListImplementation: View {
                 newValueShow = true
                 withAnimation(.easeInOut(duration: 1)) {
                     newValueOffsetY = new_value_node_offset_y
-                    for ctx in context.list {
-                        context.listOffset[ctx.index] = ctx.offsetValue(count: context.list.count)
-                        context.linkEnd[ctx.index] = ctx.linkEndPosition(count: context.list.count)
-                    }
+                    context.enterMoveAnimation()
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     newValueOffsetY = 0
                     newValueShow = false
-                    context.list.append(ListNodeContext(value: newValue, index: context.list.count))
-                    context.listOffset.append(CGSize.zero)
-                    context.linkEnd.append(
-                            context.list.count == 1 ? nil :
-                                    CGPoint(x: 240, y: 240))
+                    // 新增
+                    context.newNode(newValue)
                     for i in 0..<context.listOffset.count {
                         context.listOffset[i] = CGSize.zero
                     }
