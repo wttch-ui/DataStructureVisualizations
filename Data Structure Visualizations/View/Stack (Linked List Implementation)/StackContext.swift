@@ -9,116 +9,130 @@ import SwiftUI
 import Combine
 
 class StackContext: ObservableObject {
-     // 栈元素保存的位置
-     @Published var list: [ListNodeContext] = []
+    // 栈元素保存的位置
+    var list: [ListNodeContext] = []
+    // 记录每个单元格的位置信息，每次新增的时候都在后面添加一个位置，根据规则直接往后排
+    // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
+    // 画线的时候会用到该值
+    var position: [CGPoint] = []
+    // 动画偏移数组，每个节点都有一个对应的值，用来动画时偏移使用
+    @Published var listOffset: [CGSize] = []
+    // 画线结束数组，每个节点都有一个对应的值，用来说明画线动画结束的位置
+    @Published var linkEnd: [CGPoint?] = []
 
-     @Published var listOffset: [CGSize] = []
-     @Published var linkEnd: [CGPoint?] = []
+    init() {
+        position.append(newPosition(0))
+    }
+
+    ///
+    /// 新增一个数据节点
+    ///
+    /// - Parameter value: 数据节点的值
+    func newNode(_ value: Int) {
+        let node = ListNodeContext(value: value, context: self)
+        list.append(node)
+        position.append(newPosition(list.count))
+        listOffset.append(CGSize.zero)
+        linkEnd.append(list.count == 1 ? nil : CGPoint(x: 200, y: 240))
+    }
 
 
-     ///
-     /// 新增一个数据节点
-     ///
-     /// - Parameter value: 数据节点的值
-     func newNode(_ value: Int) {
-          let node = ListNodeContext(value: value, context: self)
-          list.append(node)
-          listOffset.append(CGSize.zero)
-          linkEnd.append(list.count == 1 ? nil :
-                          CGPoint(x: 240, y: 240))
-     }
+    ///
+    /// 新增一个元素的所在位置
+    ///
+    /// - Returns: 新增元素的位置
+    ///
+    private func newPosition(_ index: Int) -> CGPoint {
+        CGPoint(x: CGFloat(index % 6) * 100.0 + 100, y: CGFloat(index / 6) * 80 + 240)
+    }
 
-     ///
-     /// 入栈时的移动和画线的动画
-     ///
-     func enterMoveAnimation() {
-          for ctx in list {
-               listOffset[ctx.index] = ctx.offsetValue(count: list.count)
-               linkEnd[ctx.index] = ctx.linkEndPosition(count: list.count)
-          }
-     }
+    ///
+    /// 入栈时的移动和画线的动画
+    ///
+    func enterMoveAnimation() {
+        list.forEach { ctx in
+            listOffset[ctx.index] = ctx.enterAnimationOffset()
+            linkEnd[ctx.index] = ctx.linkEndPosition()
+        }
+    }
 }
-
 
 
 ///
 /// 节点上下文数据
 ///
 public class ListNodeContext {
-     // 节点的数据值
-     var value: Int
-     // 节点索引, 越小越靠后
-     var index: Int
+    // 节点的数据值
+    var value: Int
+    // 节点索引, 越小越靠后
+    var index: Int
 
-     private let position = CGPoint(x: 100, y: 100)
-     private let hCount = 6
+    private let hCount = 6
 
-     private var context: StackContext = StackContext()
+    private var context: StackContext = StackContext()
 
-     init(value: Int, context: StackContext) {
-          self.value = value
-          self.context = context
-          self.index = context.list.count
-     }
+    init(value: Int, context: StackContext) {
+        self.value = value
+        self.context = context
+        self.index = context.list.count
+    }
 
-     init(value: Int, index: Int) {
-          self.value = value
-          self.index = index
-     }
+    init(value: Int, index: Int) {
+        self.value = value
+        self.index = index
+    }
 
-     ///
-     /// 获取当前元素的偏移量
-     ///
-     /// 第count-1个元素，也就是新增的，单独配置移动轨迹
-     ///
-     /// - Parameters:
-     ///   - count 总元素个数
-     /// - Returns: 当前元素动画的偏离量
-     ///
-     func offsetValue(count: Int) -> CGSize {
-          // 就是正数 1...count
-          // 因为偏移是稍微预支下一个元素的
-          let newIndex = count - index
-          if newIndex % 6 == 0 {
-               return CGSize(width: -100 * 5, height: 80)
-          } else {
-               return CGSize(width: 100, height: 0)
-          }
-     }
+    ///
+    /// 获取当前元素的入栈动画时的偏移量
+    ///
+    /// 第count-1个元素，也就是新增的，单独配置移动轨迹
+    ///
+    /// - Returns: 当前元素动画的偏离量
+    ///
+    func enterAnimationOffset() -> CGSize {
+        // 就是正数 1...count
+        // 因为偏移是稍微预支下一个元素的
+        let newIndex = context.list.count - index
+        var offset: CGSize
+        if newIndex % 6 == 0 {
+            offset = CGSize(width: -100 * 5, height: 80)
+        } else {
+            offset = CGSize(width: 100, height: 0)
+        }
+        return offset
+    }
 
-     ///
-     /// 获取当前元素的位置
-     ///
-     /// - Parameters:
-     ///   - count: 总元素个数
-     /// - Returns: 当前元素位置
-     ///
-     func position(count: Int) -> CGPoint {
-          // 就是正数 0...count - 1
-          let newIndex = count - index - 1
-          return CGPoint(x: CGFloat(newIndex % 6) * 100.0 + 100 , y: CGFloat(newIndex / 6) * 80 + 240)
-     }    ///
+    ///
+    /// 获取当前元素的位置
+    ///
+    /// - Returns: 当前元素位置
+    ///
+    func position() -> CGPoint {
+        // 就是正数 0...count - 1
+        let newIndex = context.list.count - index - 1
+        return context.position[newIndex]
+    }
 
-     ///
-     /// 获取添加元素后当前元素的箭头所指的位置
-     ///
-     /// - Parameters:
-     ///   - count: 总元素个数
-     /// - Return: 当前元素位置
-     ///
-     func linkEndPosition(count: Int) -> CGPoint? {
-          if index == 0 {
-               // 第一个元素没有尾部
-               return nil
-          }
-          // 就是正数 1...count
-          let newIndex = count - index + 2
-          return CGPoint(x: CGFloat(newIndex % 6) * 100.0 + 100 , y: CGFloat(newIndex / 6) * 80 + 240)
-     }
+    ///
+    /// 获取添加元素后当前元素的箭头所指的位置
+    ///
+    /// - Return: 添加元素后当前元素的箭头所指的位置
+    ///
+    func linkEndPosition() -> CGPoint? {
+        if index == 0 {
+            // 第一个元素没有尾部
+            return nil
+        }
+        // 就是正数 1...count
+        let newIndex = context.list.count - index + 1
+        let position = context.position[newIndex]
+        print("第\(index)个元素，连线目标第\(newIndex)/\(context.position.count)个位置")
+        return position
+    }
 }
 
-extension ListNodeContext : Identifiable {
-     public var id: Int {
-          index
-     }
+extension ListNodeContext: Identifiable {
+    public var id: Int {
+        index
+    }
 }

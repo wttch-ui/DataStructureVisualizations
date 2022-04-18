@@ -17,7 +17,7 @@ struct ValueNode: View {
             .overlay(content: {
                 if !isBlack {
                     Text("\(value)")
-                        .font(.caption)
+                        .font(.title)
                         .foregroundColor(.primary)
                 }
             })

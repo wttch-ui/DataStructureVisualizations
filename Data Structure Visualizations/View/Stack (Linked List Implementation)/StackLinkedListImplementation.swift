@@ -64,7 +64,7 @@ struct StackLinkedListImplementation: View {
                     .position(newNodePos())
             ForEach(context.list) { ctx in
                 ListNode(value: ctx.value, linkEnd: context.linkEnd[ctx.index])
-                        .position(ctx.position(count: context.list.count))
+                        .position(ctx.position())
                         .offset(context.listOffset[ctx.index])
             }
         }

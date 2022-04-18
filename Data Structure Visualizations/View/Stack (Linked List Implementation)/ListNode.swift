@@ -17,21 +17,23 @@ struct ListNode: View, Animatable {
             let w = g.size.width
             let frame = g.frame(in: .named(CoordinateSpaceName.StackLinkedListImplementaion))
             Rectangle()
-                .foregroundColor(.cyan)
-                .overlay(content: {
-                    ValueNode(value: value ?? 0, isBlack: value == nil)
-                })
-                .frame(width: w * (1 - node_right_rate), height: h)
+                    .foregroundColor(.cyan)
+                    .overlay(content: {
+                        ValueNode(value: value ?? 0, isBlack: value == nil)
+                    })
+                    .frame(width: w * (1 - node_right_rate), height: h)
             Rectangle()
-                .foregroundColor(.brown)
-                .offset(x: w * (1 - node_right_rate), y: 0)
-                .frame(width: w * node_right_rate, height: h)
+                    .foregroundColor(.brown)
+                    .offset(x: w * (1 - node_right_rate), y: 0)
+                    .frame(width: w * node_right_rate, height: h)
             if linkEnd != nil {
-                LinkArrow(start: CGPoint(x: w * (1 - node_right_rate / 2), y: h / 2), end: CGPoint(x: linkEnd!.x - frame.origin.x - 72, y: linkEnd!.y - frame.origin.y + 16))
-                    .stroke(.red, lineWidth: 3.0)
+                LinkArrow(
+                        start: CGPoint(x: w * (1 - node_right_rate / 2), y: h / 2),
+                        end: CGPoint(x: linkEnd!.x - frame.origin.x - 32, y: linkEnd!.y - frame.origin.y + 16)
+                ).stroke(.red, lineWidth: 3.0)
             }
         }
-        .frame(width: node_size_width, height: node_size_height)
+                .frame(width: node_size_width, height: node_size_height)
     }
 }
 
