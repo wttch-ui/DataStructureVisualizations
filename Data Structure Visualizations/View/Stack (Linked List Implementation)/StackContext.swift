@@ -13,12 +13,12 @@ class StackContext: ObservableObject {
     var list: [ListNodeContext] = []
     // 记录每个单元格的位置信息，每次新增的时候都在后面添加一个位置，根据规则直接往后排
     // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
-    // 画线的时候会用到该值
-    var position: [CGPoint] = []
+    // 画线和定位的时候会用到该值
+    fileprivate var position: [CGPoint] = []
     // 动画偏移数组，每个节点都有一个对应的值，用来动画时偏移使用
-    @Published var listOffset: [CGSize] = []
+    @Published var animationOffset: [CGSize] = []
     // 画线结束数组，每个节点都有一个对应的值，用来说明画线动画结束的位置
-    @Published var linkEnd: [CGPoint?] = []
+    @Published var animationLinkEnd: [CGPoint] = []
 
     init() {
         position.append(newPosition(0))
@@ -32,8 +32,16 @@ class StackContext: ObservableObject {
         let node = ListNodeContext(value: value, context: self)
         list.append(node)
         position.append(newPosition(list.count))
-        listOffset.append(CGSize.zero)
-        linkEnd.append(list.count == 1 ? nil : CGPoint(x: 200, y: 240))
+        animationOffset.append(CGSize.zero)
+        // 为第一个元素以外的元素添加箭头动画的值
+        if list.count != 1 {
+            animationLinkEnd.append(CGPoint(x: 200, y: 240))
+        }
+
+        // 重置所有动画偏移
+        for i in 0..<animationOffset.count {
+            animationOffset[i] = CGSize.zero
+        }
     }
 
 
@@ -51,8 +59,11 @@ class StackContext: ObservableObject {
     ///
     func enterMoveAnimation() {
         list.forEach { ctx in
-            listOffset[ctx.index] = ctx.enterAnimationOffset()
-            linkEnd[ctx.index] = ctx.linkEndPosition()
+            animationOffset[ctx.index] = ctx.enterAnimationOffset()
+            let linkEndPosition = ctx.linkEndAnimationTarget()
+            if ctx.index > 0 && linkEndPosition != nil {
+                animationLinkEnd[ctx.index - 1] = linkEndPosition!
+            }
         }
     }
 }
@@ -113,21 +124,26 @@ public class ListNodeContext {
         return context.position[newIndex]
     }
 
+    func linkEndPosition() -> CGPoint? {
+        if index == 0 {
+            return nil
+        }
+        return context.animationLinkEnd[index - 1]
+    }
+
     ///
     /// 获取添加元素后当前元素的箭头所指的位置
     ///
     /// - Return: 添加元素后当前元素的箭头所指的位置
     ///
-    func linkEndPosition() -> CGPoint? {
+    func linkEndAnimationTarget() -> CGPoint? {
         if index == 0 {
             // 第一个元素没有尾部
             return nil
         }
         // 就是正数 1...count
         let newIndex = context.list.count - index + 1
-        let position = context.position[newIndex]
-        print("第\(index)个元素，连线目标第\(newIndex)/\(context.position.count)个位置")
-        return position
+        return context.position[newIndex]
     }
 }
 

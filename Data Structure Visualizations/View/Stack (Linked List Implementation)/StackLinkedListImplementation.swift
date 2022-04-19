@@ -15,11 +15,6 @@ struct StackLinkedListImplementation: View {
     // 新值
     @State private var newValue = 0
 
-    @State var list: [ListNodeContext] = []
-
-    @State var listOffset: [CGSize] = []
-    @State var linkEnd: [CGPoint?] = []
-
     @EnvironmentObject var context: StackContext
 
     var body: some View {
@@ -37,9 +32,6 @@ struct StackLinkedListImplementation: View {
                     newValueShow = false
                     // 新增
                     context.newNode(newValue)
-                    for i in 0..<context.listOffset.count {
-                        context.listOffset[i] = CGSize.zero
-                    }
                 })
             }
                     .position(x: 40, y: 0)
@@ -63,9 +55,11 @@ struct StackLinkedListImplementation: View {
             ListNode()
                     .position(newNodePos())
             ForEach(context.list) { ctx in
-                ListNode(value: ctx.value, linkEnd: context.linkEnd[ctx.index])
+                // 不然会报一个 状态 nil 的错误
+                let linkEnd = ctx.linkEndPosition() == nil ? nil : ctx.linkEndPosition()
+                ListNode(value: ctx.value, linkEnd: linkEnd)
                         .position(ctx.position())
-                        .offset(context.listOffset[ctx.index])
+                        .offset(context.animationOffset[ctx.index])
             }
         }
                 .offset(y: 16)
