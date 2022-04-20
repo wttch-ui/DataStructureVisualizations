@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension StackLinkedListImplementation {
     struct Constants {
         let node = 1.0

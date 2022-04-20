@@ -44,7 +44,6 @@ class StackContext: ObservableObject {
         }
     }
 
-
     ///
     /// 新增一个元素的所在位置
     ///
@@ -67,7 +66,6 @@ class StackContext: ObservableObject {
         }
     }
 }
-
 
 ///
 /// 节点上下文数据
@@ -144,6 +142,16 @@ public class ListNodeContext {
         // 就是正数 1...count
         let newIndex = context.list.count - index + 1
         return context.position[newIndex]
+    }
+
+    ///
+    /// 获取栈的下一个元素
+    /// - Returns:
+    func nextNode() -> ListNodeContext? {
+        if index - 1 < 0 {
+            return nil
+        }
+        return context.list[index - 1]
     }
 }
 

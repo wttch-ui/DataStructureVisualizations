@@ -10,7 +10,7 @@ import SwiftUI
 struct LinkArrow: Shape {
     var start: CGPoint
     var end: CGPoint
-    
+
     var animatableData: AnimatablePair<CGPoint.AnimatableData, CGPoint.AnimatableData> {
         get {
             AnimatablePair(start.animatableData, end.animatableData)
@@ -20,7 +20,7 @@ struct LinkArrow: Shape {
             end = newValue.second.point
         }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.move(to: start)

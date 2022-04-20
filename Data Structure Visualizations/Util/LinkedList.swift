@@ -8,10 +8,10 @@
 import Foundation
 
 class LinkedList<T> {
-    private var head: Node<T>? = nil
-    private var tail: Node<T>? = nil
+    private var head: Node<T>?
+    private var tail: Node<T>?
     private var length = 0
-    
+
     func push(_ data: T) {
         let newNode = Node(data)
         if tail == nil {
@@ -25,7 +25,7 @@ class LinkedList<T> {
         }
         length += 1
     }
-    
+
     func pop() -> T? {
         length -= 1
         if head != nil {
@@ -41,7 +41,7 @@ class LinkedList<T> {
         }
         return nil
     }
-    
+
     func append(_ data: T) {
         let newNode = Node(data)
         if head == nil {
@@ -65,7 +65,7 @@ private class Node<T> {
         self.data = data
         self.next = nil
     }
-    
+
     init(_ data: T, next: Node?) {
         self.data = data
         self.next = next
@@ -82,7 +82,7 @@ func sg_getAnyObjectMemoryAddress(object: AnyObject) -> String {
 func sg_equateableAnyObject(object1: AnyObject, object2: AnyObject) -> Bool {
     let str1 = sg_getAnyObjectMemoryAddress(object: object1)
     let str2 = sg_getAnyObjectMemoryAddress(object: object2)
-    
+
     if str1 == str2 {
         return true
     } else {

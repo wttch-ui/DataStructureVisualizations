@@ -18,7 +18,7 @@ struct StackLinkedListImplementation: View {
     @EnvironmentObject var context: StackContext
 
     var body: some View {
-        GeometryReader { g in
+        GeometryReader { _ in
             Button("新增") {
                 newValue = Int(arc4random_uniform(10))
 
@@ -43,6 +43,7 @@ struct StackLinkedListImplementation: View {
                         .offset(x: 0, y: newValueOffsetY)
                         .zIndex(10)
             }
+
             Circle()
                     .foregroundColor(.red)
                     .overlay(content: {
@@ -57,9 +58,16 @@ struct StackLinkedListImplementation: View {
             ForEach(context.list) { ctx in
                 // 不然会报一个 状态 nil 的错误
                 let linkEnd = ctx.linkEndPosition() == nil ? nil : ctx.linkEndPosition()
-                ListNode(value: ctx.value, linkEnd: linkEnd)
+                ListNode(context: ctx)
                         .position(ctx.position())
                         .offset(context.animationOffset[ctx.index])
+                if linkEnd != nil {
+                    LinkArrow(
+                            start: ctx.position() + CGPoint(x: context.animationOffset[ctx.index].width + 32, y: context.animationOffset[ctx.index].height) ,
+                            end: linkEnd! + CGPoint(x: -20, y: 0)
+                    ).stroke(.red, lineWidth: 3.0)
+                            .zIndex(10)
+                }
             }
         }
                 .offset(y: 16)

@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum CoordinateSpaceName : String {
+enum CoordinateSpaceName: String {
     case StackLinkedListImplementaion = "StackLinkedListImplementaion"
 }
 
 struct Wttch {
-    
+
 }
 
 extension Wttch {
@@ -21,20 +21,19 @@ extension Wttch {
             Wttch.test()
         }
     }
-    
+
     struct Node2 {
-        
+
     }
     static func test() {}
 }
 
 extension Wttch {
     struct Node4 {
-        
+
     }
 }
 
 extension Wttch.Node2 {
-    
-}
 
+}

@@ -7,31 +7,43 @@
 
 import SwiftUI
 
+///
+/// 节点
+///
 struct ListNode: View, Animatable {
-    var value: Int? = nil
-    var linkEnd: CGPoint? = nil
+    // 右侧指针视图所占的宽度比例
+    let pointerWidthRate = 1.0 / 4
+    // 节点的数据值
+    var value: Int?
+
+    var context: ListNodeContext?
+
+    // 过去实际的元素的值
+    var realValue: Int? {
+        context?.value ?? value
+    }
+
+    // 判断下一个节点是否有数据
+    var isNextNull: Bool {
+        if context != nil {
+            return context!.nextNode()?.value == nil
+        }
+        return value == nil
+    }
 
     var body: some View {
-        GeometryReader { g in
-            let h = g.size.height
-            let w = g.size.width
-            let frame = g.frame(in: .named(CoordinateSpaceName.StackLinkedListImplementaion))
+        GeometryReader { geometry in
+            let height = geometry.size.height
+            let width = geometry.size.width
             Rectangle()
                     .foregroundColor(.cyan)
                     .overlay(content: {
-                        ValueNode(value: value ?? 0, isBlack: value == nil)
+                        ValueNode(value: realValue ?? 0, isBlack: realValue == nil)
                     })
-                    .frame(width: w * (1 - node_right_rate), height: h)
-            Rectangle()
-                    .foregroundColor(.brown)
-                    .offset(x: w * (1 - node_right_rate), y: 0)
-                    .frame(width: w * node_right_rate, height: h)
-            if linkEnd != nil {
-                LinkArrow(
-                        start: CGPoint(x: w * (1 - node_right_rate / 2), y: h / 2),
-                        end: CGPoint(x: linkEnd!.x - frame.origin.x - 32, y: linkEnd!.y - frame.origin.y + 16)
-                ).stroke(.red, lineWidth: 3.0)
-            }
+                    .frame(width: width * (1 - pointerWidthRate), height: height)
+            PointerView(isNull: isNextNull)
+                    .offset(x: width * (1 - pointerWidthRate), y: 0)
+                    .frame(width: width * pointerWidthRate, height: height)
         }
                 .frame(width: node_size_width, height: node_size_height)
     }
@@ -39,6 +51,6 @@ struct ListNode: View, Animatable {
 
 struct ListNode_Previews: PreviewProvider {
     static var previews: some View {
-        ListNode(value: 1, linkEnd: CGPoint(x: 100, y: 100))
+        ListNode(value: 1)
     }
 }
