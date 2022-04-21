@@ -15,6 +15,11 @@ struct StackLinkedListImplementation: View {
     // 新值
     @State private var newValue = 0
 
+    @State private var newNodeValue: Int? = nil
+
+    @State private var topLinkEnd = CGPoint(x: new_list_node_center_x
+            + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
+
     @EnvironmentObject var context: StackContext
 
     var body: some View {
@@ -23,15 +28,25 @@ struct StackLinkedListImplementation: View {
                 newValue = Int(arc4random_uniform(10))
 
                 newValueShow = true
+                newNodeValue = newValue
+                // 新增
                 withAnimation(.easeInOut(duration: 1)) {
                     newValueOffsetY = new_value_node_offset_y
-                    context.enterMoveAnimation()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        topLinkEnd = CGPoint(x: new_list_node_center_x
+                                + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
+                    }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     newValueOffsetY = 0
                     newValueShow = false
-                    // 新增
                     context.newNode(newValue)
+                    withAnimation(.linear(duration: 1)) {
+                        context.enterMoveAnimation()
+                        topLinkEnd = context.animationPosition[context.animationPosition.count - 1]
+                    }
                 })
             }
                     .position(x: 40, y: 0)
@@ -43,28 +58,27 @@ struct StackLinkedListImplementation: View {
                         .offset(x: 0, y: newValueOffsetY)
                         .zIndex(10)
             }
-
-            Circle()
-                    .foregroundColor(.red)
-                    .overlay(content: {
-                        Text("栈顶")
-                                .font(.caption)
-                                .foregroundColor(.primary)
-                    })
+            PointerView(isNull: context.list.count == 0, text: "Top")
                     .position(x: 32, y: new_value_node_offset_y)
                     .frame(width: 24, height: 24)
-            ListNode()
-                    .position(newNodePos())
+            if context.animationPosition.count >= 1 {
+                LinkArrow(
+                        start: CGPoint(x: 32 + 16, y: new_value_node_offset_y),
+                        end: topLinkEnd + CGPoint(x: -24, y: 0)
+                ).stroke(.red, lineWidth: 3.0)
+                        .zIndex(10)
+            }
+            // ListNode(value: newNodeValue)
+            //        .position(newNodePos())
             ForEach(context.list) { ctx in
                 // 不然会报一个 状态 nil 的错误
-                let linkEnd = ctx.linkEndPosition() == nil ? nil : ctx.linkEndPosition()
                 ListNode(context: ctx)
-                        .position(ctx.position())
-                        .offset(context.animationOffset[ctx.index])
-                if linkEnd != nil {
+                        .position(context.animationPosition[ctx.index])
+                let linkEndIndex = ctx.index - 1
+                if linkEndIndex >= 0 {
                     LinkArrow(
-                            start: ctx.position() + CGPoint(x: context.animationOffset[ctx.index].width + 32, y: context.animationOffset[ctx.index].height) ,
-                            end: linkEnd! + CGPoint(x: -20, y: 0)
+                            start: context.animationPosition[ctx.index] + CGPoint(x: 24, y: 0),
+                            end: context.animationPosition[linkEndIndex] + CGPoint(x: -24, y: 0)
                     ).stroke(.red, lineWidth: 3.0)
                             .zIndex(10)
                 }

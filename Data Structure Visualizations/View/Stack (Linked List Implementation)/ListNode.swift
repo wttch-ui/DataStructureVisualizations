@@ -28,7 +28,7 @@ struct ListNode: View, Animatable {
         if context != nil {
             return context!.nextNode()?.value == nil
         }
-        return value == nil
+        return true
     }
 
     var body: some View {
