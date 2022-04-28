@@ -23,6 +23,7 @@
 		49EA06A928091D01004C3650 /* CoordinateSpaceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA06A828091D01004C3650 /* CoordinateSpaceName.swift */; };
 		6C367822B3D09EEC84B293CF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 6C36766150B73DE03D953EAC /* .gitignore */; };
 		6C367A1B3F181A44A2456A8C /* PointerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C367C66F75CB0C26F8A040A /* PointerView.swift */; };
+		6C367C40EAE0040D9575D487 /* PositionCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3673122531FF4170F2A487 /* PositionCalculator.swift */; };
 		6C367E3E1552BA4FBE510D21 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C367140A3CF085B06ADF076 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		49EA06A428082972004C3650 /* ValueNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueNode.swift; sourceTree = "<group>"; };
 		49EA06A828091D01004C3650 /* CoordinateSpaceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateSpaceName.swift; sourceTree = "<group>"; };
 		6C367140A3CF085B06ADF076 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		6C3673122531FF4170F2A487 /* PositionCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositionCalculator.swift; sourceTree = "<group>"; };
 		6C36766150B73DE03D953EAC /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 		6C367C66F75CB0C26F8A040A /* PointerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,6 +172,7 @@
 				49EA06A428082972004C3650 /* ValueNode.swift */,
 				49A9F352280D3741009BB867 /* StackContext.swift */,
 				6C367C66F75CB0C26F8A040A /* PointerView.swift */,
+				6C3673122531FF4170F2A487 /* PositionCalculator.swift */,
 			);
 			path = "Stack (Linked List Implementation)";
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				49EA06A3280828BA004C3650 /* Constants.swift in Sources */,
 				6C367E3E1552BA4FBE510D21 /* Extension.swift in Sources */,
 				6C367A1B3F181A44A2456A8C /* PointerView.swift in Sources */,
+				6C367C40EAE0040D9575D487 /* PositionCalculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,7 +14,7 @@ class StackContext: ObservableObject {
     // 记录每个单元格的位置信息，每次新增的时候都在后面添加一个位置，根据规则直接往后排
     // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     // 画线和定位的时候会用到该值
-    private var positionList: [CGPoint] = []
+    private var positionCalculator:PositionCalculator = PositionCalculator()
     // 动画偏移数组，每个节点都有一个对应的值，用来动画时偏移使用
     // 考虑不使用偏移，而是直接移动位置，不停的变换位置
     @Published var animationPosition: [CGPoint] = []
@@ -23,7 +23,6 @@ class StackContext: ObservableObject {
 
     init(_ columnSize: Int = 6) {
         self.columnSize = columnSize
-        positionList.append(calcNewPosition(0))
     }
 
     ///
@@ -31,7 +30,7 @@ class StackContext: ObservableObject {
     /// - Parameter index:
     /// - Returns:
     func getPosition(_ index: Int) -> CGPoint {
-        return positionList[list.count - index + 1]
+        positionCalculator[list.count - index + 1]
     }
 
     ///
@@ -41,22 +40,12 @@ class StackContext: ObservableObject {
     func newNode(_ value: Int) {
         let node = ListNodeContext(value: value, context: self)
         list.append(node)
-        positionList.append(calcNewPosition(list.count))
-        animationPosition.append(positionList[0])
+        animationPosition.append(positionCalculator[0])
     }
 
-    ///
-    /// 新增一个元素的所在位置
-    ///
-    /// - Returns: 新增元素的位置
-    ///
-    private func calcNewPosition(_ index: Int) -> CGPoint {
-        if index == 0 {
-            return CGPoint(x: new_list_node_center_x
-                    + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
-        }
-        let newIndex = index - 1
-        return CGPoint(x: CGFloat(newIndex % 6) * 100.0 + 100, y: CGFloat(newIndex / 6) * 80 + 240)
+    func removeNode() {
+        list.removeLast()
+        animationPosition.removeLast()
     }
 
     ///
@@ -65,6 +54,14 @@ class StackContext: ObservableObject {
     func enterMoveAnimation() {
         list.forEach { ctx in
             animationPosition[ctx.index] = getPosition(ctx.index + 1)
+        }
+    }
+    ///
+    /// 入栈时的移动和画线的动画
+    ///
+    func popAnimation() {
+        list.forEach { ctx in
+            animationPosition[ctx.index] = getPosition(ctx.index + 2)
         }
     }
 }

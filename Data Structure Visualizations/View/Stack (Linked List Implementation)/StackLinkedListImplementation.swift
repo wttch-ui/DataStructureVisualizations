@@ -50,6 +50,15 @@ struct StackLinkedListImplementation: View {
                 })
             }
                     .position(x: 40, y: 0)
+            Button("出栈") {
+                withAnimation(.easeInOut(duration: 1)) {
+                    context.popAnimation()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    context.removeNode()
+                }
+            }
+                    .position(x: 40, y: 60)
             if newValueShow {
                 Text("新值：")
                         .position(x: 160, y: 0)
