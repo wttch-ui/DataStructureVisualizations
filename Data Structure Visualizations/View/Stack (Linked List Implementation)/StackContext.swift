@@ -19,18 +19,30 @@ class StackContext: ObservableObject {
     // 考虑不使用偏移，而是直接移动位置，不停的变换位置
     @Published var animationPosition: [CGPoint] = []
 
+    @Published var topLinkEnd: CGPoint
+
+    // 新值偏移
+    @Published var newValueOffsetY = 0.0
+    // 新值
+    @Published var newValue:Int? = nil
+
     private var columnSize: Int
 
     init(_ columnSize: Int = 6) {
         self.columnSize = columnSize
+        self.topLinkEnd = positionCalculator[0]
     }
 
     ///
     /// 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     /// - Parameter index:
     /// - Returns:
-    func getPosition(_ index: Int) -> CGPoint {
+    func getPositionByStackIndex(_ index: Int) -> CGPoint {
         positionCalculator[list.count - index + 1]
+    }
+
+    func getPosition(_ index: Int) -> CGPoint {
+        positionCalculator[index]
     }
 
     ///
@@ -51,17 +63,31 @@ class StackContext: ObservableObject {
     ///
     /// 入栈时的移动和画线的动画
     ///
-    func enterMoveAnimation() {
+    func pushAnimation() {
         list.forEach { ctx in
-            animationPosition[ctx.index] = getPosition(ctx.index + 1)
+            animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 1)
         }
+        topLinkEnd = getPosition(1)
     }
     ///
     /// 入栈时的移动和画线的动画
     ///
     func popAnimation() {
         list.forEach { ctx in
-            animationPosition[ctx.index] = getPosition(ctx.index + 2)
+            animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 2)
+        }
+        topLinkEnd = getPosition(0)
+    }
+
+    func onPop() {
+        withAnimation(.easeInOut(duration: 1)) {
+            popAnimation()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                self.topLinkEnd = self.getPosition(1)
+            }
+            self.removeNode()
         }
     }
 }

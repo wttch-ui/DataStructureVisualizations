@@ -8,61 +8,44 @@
 import SwiftUI
 
 struct StackLinkedListImplementation: View {
-    // 展示新值
-    @State private var newValueShow = false
     // 新值偏移
     @State private var newValueOffsetY = 0.0
-    // 新值
-    @State private var newValue = 0
-
-    @State private var newNodeValue: Int? = nil
-
-    @State private var topLinkEnd = CGPoint(x: new_list_node_center_x
-            + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
 
     @EnvironmentObject var context: StackContext
 
     var body: some View {
         GeometryReader { _ in
             Button("新增") {
-                newValue = Int(arc4random_uniform(10))
-
-                newValueShow = true
-                newNodeValue = newValue
+                context.newValue = Int(arc4random_uniform(10))
                 // 新增
                 withAnimation(.easeInOut(duration: 1)) {
                     newValueOffsetY = new_value_node_offset_y
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation(.easeInOut(duration: 0.5)) {
-                        topLinkEnd = CGPoint(x: new_list_node_center_x
-                                + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
+                        context.topLinkEnd = context.getPosition(0)
                     }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     newValueOffsetY = 0
-                    newValueShow = false
-                    context.newNode(newValue)
+                    context.newNode(context.newValue!)
+                    context.newValue = nil
                     withAnimation(.linear(duration: 1)) {
-                        context.enterMoveAnimation()
-                        topLinkEnd = context.animationPosition[context.animationPosition.count - 1]
+                        context.pushAnimation()
                     }
                 })
             }
                     .position(x: 40, y: 0)
-            Button("出栈") {
-                withAnimation(.easeInOut(duration: 1)) {
-                    context.popAnimation()
+            if !context.list.isEmpty {
+                Button("出栈") {
+                    context.onPop()
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    context.removeNode()
-                }
+                        .position(x: 40, y: 60)
             }
-                    .position(x: 40, y: 60)
-            if newValueShow {
+            if context.newValue != nil {
                 Text("新值：")
                         .position(x: 160, y: 0)
-                ValueNode(value: newValue, isBlack: false)
+                ValueNode(value: context.newValue!, isBlack: false)
                         .position(newValuePos())
                         .offset(x: 0, y: newValueOffsetY)
                         .zIndex(10)
@@ -73,7 +56,7 @@ struct StackLinkedListImplementation: View {
             if context.animationPosition.count >= 1 {
                 LinkArrow(
                         start: CGPoint(x: 32 + 16, y: new_value_node_offset_y),
-                        end: topLinkEnd + CGPoint(x: -24, y: 0)
+                        end: context.topLinkEnd + CGPoint(x: -24, y: 0)
                 ).stroke(.red, lineWidth: 3.0)
                         .zIndex(10)
             }
@@ -98,11 +81,6 @@ struct StackLinkedListImplementation: View {
 
     func newValuePos() -> CGPoint {
         return CGPoint(x: new_list_node_center_x, y: 0)
-    }
-
-    func newNodePos() -> CGPoint {
-        return CGPoint(x: new_list_node_center_x
-                + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
     }
 }
 
