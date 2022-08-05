@@ -14,7 +14,7 @@ class StackContext: ObservableObject {
     // 记录每个单元格的位置信息，每次新增的时候都在后面添加一个位置，根据规则直接往后排
     // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     // 画线和定位的时候会用到该值
-    private var positionCalculator:PositionCalculator = PositionCalculator()
+    private var positionCalculator: PositionCalculator = PositionCalculator()
     // 动画偏移数组，每个节点都有一个对应的值，用来动画时偏移使用
     // 考虑不使用偏移，而是直接移动位置，不停的变换位置
     @Published var animationPosition: [CGPoint] = []
@@ -24,13 +24,13 @@ class StackContext: ObservableObject {
     // 新值偏移
     @Published var newValueOffsetY = 0.0
     // 新值
-    @Published var newValue:Int? = nil
+    @Published var newValue: Int?
 
     private var columnSize: Int
 
     init(_ columnSize: Int = 6) {
         self.columnSize = columnSize
-        self.topLinkEnd = positionCalculator[0]
+        topLinkEnd = positionCalculator[0]
     }
 
     ///
@@ -108,7 +108,7 @@ public class ListNodeContext {
     init(value: Int, context: StackContext) {
         self.value = value
         self.context = context
-        self.index = context.list.count
+        index = context.list.count
     }
 
     init(value: Int, index: Int) {
@@ -123,7 +123,7 @@ public class ListNodeContext {
     ///
     func position() -> CGPoint {
         // 就是正数 0...count - 1
-        return context.animationPosition[context.list.count - index - 1]
+        context.animationPosition[context.list.count - index - 1]
     }
 
     ///

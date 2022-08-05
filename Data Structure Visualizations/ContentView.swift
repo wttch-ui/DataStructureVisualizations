@@ -20,7 +20,7 @@ struct ContentView: View {
                     }
                 )
                 NavigationLink {
-                    Text("1231")
+                    StackArrayImplementation()
                 } label: {
                     Text("栈 数组实现")
                 }

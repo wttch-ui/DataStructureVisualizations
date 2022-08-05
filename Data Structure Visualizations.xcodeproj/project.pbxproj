@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4934238C289BC86D001EB7C7 /* StackArrayImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4934238B289BC86D001EB7C7 /* StackArrayImplementation.swift */; };
+		4934238E289BCBF8001EB7C7 /* StackArrayNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4934238D289BCBF8001EB7C7 /* StackArrayNode.swift */; };
 		49A9F353280D3741009BB867 /* StackContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A9F352280D3741009BB867 /* StackContext.swift */; };
+		49BC34FE2828BB8F00E2D4E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BC34FD2828BB8F00E2D4E3 /* AppDelegate.swift */; };
 		49EA066F2807D27C004C3650 /* Data_Structure_VisualizationsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA066E2807D27C004C3650 /* Data_Structure_VisualizationsApp.swift */; };
 		49EA06712807D27C004C3650 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EA06702807D27C004C3650 /* ContentView.swift */; };
 		49EA06732807D27D004C3650 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49EA06722807D27D004C3650 /* Assets.xcassets */; };
@@ -45,7 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4934238B289BC86D001EB7C7 /* StackArrayImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackArrayImplementation.swift; sourceTree = "<group>"; };
+		4934238D289BCBF8001EB7C7 /* StackArrayNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackArrayNode.swift; sourceTree = "<group>"; };
 		49A9F352280D3741009BB867 /* StackContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackContext.swift; sourceTree = "<group>"; };
+		49BC34FD2828BB8F00E2D4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49EA066B2807D27C004C3650 /* Data Structure Visualizations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Data Structure Visualizations.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EA066E2807D27C004C3650 /* Data_Structure_VisualizationsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_Structure_VisualizationsApp.swift; sourceTree = "<group>"; };
 		49EA06702807D27C004C3650 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -94,6 +100,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4934238A289BC7A8001EB7C7 /* Stack(ArrayImplementation) */ = {
+			isa = PBXGroup;
+			children = (
+				4934238B289BC86D001EB7C7 /* StackArrayImplementation.swift */,
+				4934238D289BCBF8001EB7C7 /* StackArrayNode.swift */,
+			);
+			path = "Stack(ArrayImplementation)";
+			sourceTree = "<group>";
+		};
 		49EA06622807D27C004C3650 = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +140,7 @@
 				49EA06722807D27D004C3650 /* Assets.xcassets */,
 				49EA06772807D27D004C3650 /* Data_Structure_Visualizations.entitlements */,
 				49EA06742807D27D004C3650 /* Preview Content */,
+				49BC34FD2828BB8F00E2D4E3 /* AppDelegate.swift */,
 			);
 			path = "Data Structure Visualizations";
 			sourceTree = "<group>";
@@ -157,12 +173,13 @@
 		49EA06992807F1F1004C3650 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				49EA069A2807F20A004C3650 /* Stack (Linked List Implementation) */,
+				4934238A289BC7A8001EB7C7 /* Stack(ArrayImplementation) */,
+				49EA069A2807F20A004C3650 /* Stack(LinkedListImplementation) */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		49EA069A2807F20A004C3650 /* Stack (Linked List Implementation) */ = {
+		49EA069A2807F20A004C3650 /* Stack(LinkedListImplementation) */ = {
 			isa = PBXGroup;
 			children = (
 				49EA069C2807F36E004C3650 /* ListNode.swift */,
@@ -174,7 +191,7 @@
 				6C367C66F75CB0C26F8A040A /* PointerView.swift */,
 				6C3673122531FF4170F2A487 /* PositionCalculator.swift */,
 			);
-			path = "Stack (Linked List Implementation)";
+			path = "Stack(LinkedListImplementation)";
 			sourceTree = "<group>";
 		};
 		49EA06A628091131004C3650 /* Util */ = {
@@ -321,10 +338,13 @@
 				49A9F353280D3741009BB867 /* StackContext.swift in Sources */,
 				49EA066F2807D27C004C3650 /* Data_Structure_VisualizationsApp.swift in Sources */,
 				49EA069D2807F36E004C3650 /* ListNode.swift in Sources */,
+				4934238C289BC86D001EB7C7 /* StackArrayImplementation.swift in Sources */,
 				49EA06A128080F7F004C3650 /* StackLinkedListImplementation.swift in Sources */,
+				4934238E289BCBF8001EB7C7 /* StackArrayNode.swift in Sources */,
 				49EA06A528082972004C3650 /* ValueNode.swift in Sources */,
 				49EA069F280805B7004C3650 /* LinkArrow.swift in Sources */,
 				49EA06A928091D01004C3650 /* CoordinateSpaceName.swift in Sources */,
+				49BC34FE2828BB8F00E2D4E3 /* AppDelegate.swift in Sources */,
 				49EA06A3280828BA004C3650 /* Constants.swift in Sources */,
 				6C367E3E1552BA4FBE510D21 /* Extension.swift in Sources */,
 				6C367A1B3F181A44A2456A8C /* PointerView.swift in Sources */,

@@ -8,9 +8,6 @@
 import SwiftUI
 
 struct StackLinkedListImplementation: View {
-    // 新值偏移
-    @State private var newValueOffsetY = 0.0
-
     @EnvironmentObject var context: StackContext
 
     var body: some View {
@@ -19,7 +16,7 @@ struct StackLinkedListImplementation: View {
                 context.newValue = Int(arc4random_uniform(10))
                 // 新增
                 withAnimation(.easeInOut(duration: 1)) {
-                    newValueOffsetY = new_value_node_offset_y
+                    context.newValueOffsetY = new_value_node_offset_y
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation(.easeInOut(duration: 0.5)) {
@@ -27,7 +24,7 @@ struct StackLinkedListImplementation: View {
                     }
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                    newValueOffsetY = 0
+                    context.newValueOffsetY = 0
                     context.newNode(context.newValue!)
                     context.newValue = nil
                     withAnimation(.linear(duration: 1)) {
@@ -47,7 +44,7 @@ struct StackLinkedListImplementation: View {
                         .position(x: 160, y: 0)
                 ValueNode(value: context.newValue!, isBlack: false)
                         .position(newValuePos())
-                        .offset(x: 0, y: newValueOffsetY)
+                        .offset(x: 0, y: context.newValueOffsetY)
                         .zIndex(10)
             }
             PointerView(isNull: context.list.count == 0, text: "Top")
@@ -80,12 +77,13 @@ struct StackLinkedListImplementation: View {
     }
 
     func newValuePos() -> CGPoint {
-        return CGPoint(x: new_list_node_center_x, y: 0)
+        CGPoint(x: new_list_node_center_x, y: 0)
     }
 }
 
 struct StackLinkedListImplementation_Previews: PreviewProvider {
     static var previews: some View {
         StackLinkedListImplementation()
+            .environmentObject(StackContext())
     }
 }

@@ -16,7 +16,7 @@ struct PointerView: View {
     var body: some View {
         GeometryReader { geometry in
             Rectangle()
-                    .foregroundColor(isNull ? .red : .brown)
+                    .foregroundColor(isNull ? .purple : .brown)
                     .frame(geometry.size)
                     .overlay(content: {
                         Text(text)
