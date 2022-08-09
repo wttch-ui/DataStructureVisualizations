@@ -19,7 +19,7 @@ struct SampleViewC: View {
     var body: some View {
         ZStack {
             Text("xxx")
-                .modifier(PathAnimatableModifier(p1, p2, rate: self.p))
+                .modifier(PathPositionAnimatableModifier(p1, p2, rate: self.p))
                 .onAppear {
                     withAnimation(.easeInOut(duration: 4).repeatForever()) {
                         self.p = 100
