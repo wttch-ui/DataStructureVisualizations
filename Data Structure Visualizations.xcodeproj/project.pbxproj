@@ -57,6 +57,7 @@
 		4981348C28A116C400C66205 /* QueueLinkedListImplementation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueLinkedListImplementation.swift; sourceTree = "<group>"; };
 		49A9F352280D3741009BB867 /* StackContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackContext.swift; sourceTree = "<group>"; };
 		49BC34FD2828BB8F00E2D4E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		49D3CDE928A25B9300B5BA87 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		49EA066B2807D27C004C3650 /* Data Structure Visualizations.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Data Structure Visualizations.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EA066E2807D27C004C3650 /* Data_Structure_VisualizationsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_Structure_VisualizationsApp.swift; sourceTree = "<group>"; };
 		49EA06702807D27C004C3650 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 		49EA06622807D27C004C3650 = {
 			isa = PBXGroup;
 			children = (
+				49D3CDE928A25B9300B5BA87 /* README.md */,
 				49EA066D2807D27C004C3650 /* Data Structure Visualizations */,
 				49EA067F2807D27D004C3650 /* Data Structure VisualizationsTests */,
 				49EA06892807D27D004C3650 /* Data Structure VisualizationsUITests */,
