@@ -12,9 +12,17 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
+                NavigationLink( destination: SampleViewC(CGPoint(x:400, y:20), CGPoint(x:20, y:100))
+                , isActive: $isActive, label: {
+                    Text("测试")
+                })
+                NavigationLink( destination:
+                                    QueueLinkedListImplementation()
+                , label: {
+                    Text("队列 链表实现")
+                })
                 NavigationLink(
                     destination: StackLinkedListImplementation().coordinateSpace(name: CoordinateSpaceName.StackLinkedListImplementaion),
-                    isActive: $isActive,
                     label: {
                         Text("栈 链表实现")
                     }

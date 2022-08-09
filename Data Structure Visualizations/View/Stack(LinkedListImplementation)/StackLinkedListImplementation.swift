@@ -27,9 +27,8 @@ struct StackLinkedListImplementation: View {
                     context.newValueOffsetY = 0
                     context.newNode(context.newValue!)
                     context.newValue = nil
-                    withAnimation(.linear(duration: 1)) {
-                        context.pushAnimation()
-                    }
+                    context.pushAnimation()
+                    
                 })
             }
                     .position(x: 40, y: 0)
@@ -62,15 +61,15 @@ struct StackLinkedListImplementation: View {
             ForEach(context.list) { ctx in
                 // 不然会报一个 状态 nil 的错误
                 ListNode(context: ctx)
-                        .position(context.animationPosition[ctx.index])
+                    .modifier(context.posModiftor[ctx.index])
                 let linkEndIndex = ctx.index - 1
-                if linkEndIndex >= 0 {
-                    LinkArrow(
-                            start: context.animationPosition[ctx.index] + CGPoint(x: 24, y: 0),
-                            end: context.animationPosition[linkEndIndex] + CGPoint(x: -24, y: 0)
-                    ).stroke(.red, lineWidth: 3.0)
-                            .zIndex(10)
-                }
+//                if linkEndIndex >= 0 {
+//                    LinkArrow(
+//                            start: context.animationPosition[ctx.index] + CGPoint(x: 24, y: 0),
+//                            end: context.animationPosition[linkEndIndex] + CGPoint(x: -24, y: 0)
+//                    ).stroke(.red, lineWidth: 3.0)
+//                            .zIndex(10)
+//                }
             }
         }
                 .offset(y: 16)

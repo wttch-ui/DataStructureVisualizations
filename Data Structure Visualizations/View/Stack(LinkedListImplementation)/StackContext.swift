@@ -27,6 +27,8 @@ class StackContext: ObservableObject {
     @Published var newValue: Int?
 
     private var columnSize: Int
+    @Published
+    var posModiftor: [PathAnimatableModifier] = []
 
     init(_ columnSize: Int = 6) {
         self.columnSize = columnSize
@@ -53,6 +55,7 @@ class StackContext: ObservableObject {
         let node = ListNodeContext(value: value, context: self)
         list.append(node)
         animationPosition.append(positionCalculator[0])
+        posModiftor.append(PathAnimatableModifier(positionCalculator[0], positionCalculator[1]))
     }
 
     func removeNode() {
@@ -65,10 +68,16 @@ class StackContext: ObservableObject {
     ///
     func pushAnimation() {
         list.forEach { ctx in
+            let a = animationPosition[ctx.index]
             animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 1)
+            posModiftor[ctx.index] = PathAnimatableModifier(a, animationPosition[ctx.index], rate: 0, usePath: ctx.index != list.count - 1)
+            withAnimation(.easeInOut) {
+                posModiftor[ctx.index] = PathAnimatableModifier(a, animationPosition[ctx.index], rate: 100, usePath: ctx.index != list.count - 1)
+            }
         }
         topLinkEnd = getPosition(1)
     }
+    
     ///
     /// 入栈时的移动和画线的动画
     ///
