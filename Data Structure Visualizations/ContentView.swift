@@ -12,7 +12,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink( destination: SampleViewC(CGPoint(x:400, y:20), CGPoint(x:20, y:100))
+                NavigationLink( destination:
+                    TestView()
                 , isActive: $isActive, label: {
                     Text("测试")
                 })
