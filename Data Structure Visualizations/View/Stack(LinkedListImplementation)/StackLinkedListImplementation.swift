@@ -11,7 +11,7 @@ struct StackLinkedListImplementation: View {
     @EnvironmentObject var context: StackContext
 
     var body: some View {
-        GeometryReader { _ in
+        GeometryReader { geo in
             Button("新增") {
                 context.newValue = Int(arc4random_uniform(10))
                 // 新增
@@ -62,7 +62,17 @@ struct StackLinkedListImplementation: View {
                 // 不然会报一个 状态 nil 的错误
                 ListNode(context: ctx)
                     .modifier(context.posModiftor[ctx.index])
-                let linkEndIndex = ctx.index - 1
+                    
+                if ctx.index > 0 {
+                    AnimatablePath(
+                        p1: context.getPositionByStackIndex(ctx.index + 2),
+                        p2: context.getPositionByStackIndex(ctx.index + 1),
+                        p3: context.getPositionByStackIndex(ctx.index),
+                        rate: context.rate,
+                        usePath: ctx.index != context.list.count-1)
+                    .stroke(.red, lineWidth: 2)
+                    .frame(geo.size)
+                }
 //                if linkEndIndex >= 0 {
 //                    LinkArrow(
 //                            start: context.animationPosition[ctx.index] + CGPoint(x: 24, y: 0),

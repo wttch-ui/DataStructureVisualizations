@@ -10,20 +10,22 @@ import SwiftUI
 struct TestView: View {
     @State var rate: CGFloat = 0
     var body: some View {
-        AnimatablePath(
-            p1: CGPoint(x: 400, y: 100),
-            p2: CGPoint(x: 500, y: 100),
-            p3: CGPoint(x: 200, y: 200),
-            rate: self.rate)
-                    
-            .stroke(.green, lineWidth: 2)
-            .frame(width: 800, height: 600)
-            .border(.red)
-            .onAppear {
-                withAnimation(.easeInOut(duration: 2).repeatForever()) {
-                    self.rate = 100
+        ZStack {
+            AnimatablePath(
+                p1: CGPoint(x: 400, y: 100),
+                p2: CGPoint(x: 500, y: 100),
+                p3: CGPoint(x: 200, y: 200),
+                rate: self.rate)
+                        
+                .stroke(.green, lineWidth: 2)
+                .frame(width: 800, height: 600)
+                .border(.red)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 2).repeatForever()) {
+                        self.rate = 100
+                    }
                 }
-            }
+        }
     }
 }
 
@@ -40,35 +42,42 @@ struct AnimatablePath: Shape {
     private var p3: CGPoint
     private var pathAnimationHelper1: PathAnimationHelper
     private var pathAnimationHelper2: PathAnimationHelper
+    private var usePath: Bool
     var rate: CGFloat
     
     var animatableData: CGFloat {
         get { rate }
-        set { rate = newValue
-            print(rate)
-        }
+        set { rate = newValue }
     }
     
-    init(p1: CGPoint, p2: CGPoint, p3: CGPoint, rate: CGFloat) {
+    init(p1: CGPoint, p2: CGPoint, p3: CGPoint, rate: CGFloat, usePath: Bool = true) {
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
-        self.pathAnimationHelper1 = PathAnimationHelper.create(p1, p2)
-        self.pathAnimationHelper2 = PathAnimationHelper.create(p2, p3)
+        // 暂未考虑节点的位置
+        // 如果考虑节点的位置
+        self.pathAnimationHelper1 = PathAnimationHelper.create(p1, p2, usePath: usePath)
+        self.pathAnimationHelper2 = PathAnimationHelper.create(p2, p3, usePath: usePath)
         self.rate = rate
+        self.usePath = usePath
     }
     
     func path(in rect: CGRect) -> Path {
         Path { path in
             let remainPoints = pathAnimationHelper1.remainPoints(self.rate)
             let travelPoints = pathAnimationHelper2.traveledPoints(self.rate)
-            path.move(to: remainPoints[0])
-            for i in 1..<remainPoints.count {
-                path.addLine(to: remainPoints[i])
-            }
-            
-            for p in travelPoints {
-                path.addLine(to: p)
+            if usePath {
+                path.move(to: remainPoints[0])
+                for i in 1..<remainPoints.count {
+                    path.addLine(to: remainPoints[i])
+                }
+                path.move(to: travelPoints[0])
+                for i in 1..<travelPoints.count {
+                    path.addLine(to: travelPoints[i])
+                }
+            } else {
+                path.move(to: remainPoints[0])
+                path.addLine(to: travelPoints.last!)
             }
         }
     }

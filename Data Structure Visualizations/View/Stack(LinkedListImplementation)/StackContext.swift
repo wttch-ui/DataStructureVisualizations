@@ -14,7 +14,7 @@ class StackContext: ObservableObject {
     // 记录每个单元格的位置信息，每次新增的时候都在后面添加一个位置，根据规则直接往后排
     // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     // 画线和定位的时候会用到该值
-    private var positionCalculator: PositionCalculator = PositionCalculator()
+    var positionCalculator: PositionCalculator = PositionCalculator()
     // 动画偏移数组，每个节点都有一个对应的值，用来动画时偏移使用
     // 考虑不使用偏移，而是直接移动位置，不停的变换位置
     @Published var animationPosition: [CGPoint] = []
@@ -29,6 +29,8 @@ class StackContext: ObservableObject {
     private var columnSize: Int
     @Published
     var posModiftor: [PathPositionAnimatableModifier] = []
+    @Published
+    var rate: CGFloat = 0
 
     init(_ columnSize: Int = 6) {
         self.columnSize = columnSize
@@ -67,11 +69,15 @@ class StackContext: ObservableObject {
     /// 入栈时的移动和画线的动画
     ///
     func pushAnimation() {
+        self.rate = 0
+        withAnimation(.easeInOut(duration: 2)) {
+            self.rate = 100
+        }
         list.forEach { ctx in
             let a = animationPosition[ctx.index]
             animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 1)
             posModiftor[ctx.index] = PathPositionAnimatableModifier(a, animationPosition[ctx.index], rate: 0, usePath: ctx.index != list.count - 1)
-            withAnimation(.easeInOut) {
+            withAnimation(.easeInOut(duration: 2)) {
                 posModiftor[ctx.index] = PathPositionAnimatableModifier(a, animationPosition[ctx.index], rate: 100, usePath: ctx.index != list.count - 1)
             }
         }
