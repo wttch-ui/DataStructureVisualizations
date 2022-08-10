@@ -57,7 +57,8 @@ class StackContext: ObservableObject {
         let node = ListNodeContext(value: value, context: self)
         list.append(node)
         animationPosition.append(positionCalculator[0])
-        posModiftor.append(PathPositionAnimatableModifier(positionCalculator[0], positionCalculator[1]))
+        posModiftor.append(PathPositionAnimatableModifier(positionCalculator[0], positionCalculator[1], positionCalculator[2],
+                                                         rate: 0, ctx: node, start: CGPoint(x: 50, y: 50)))
     }
 
     func removeNode() {
@@ -70,15 +71,29 @@ class StackContext: ObservableObject {
     ///
     func pushAnimation() {
         self.rate = 0
-        withAnimation(.easeInOut(duration: 2)) {
+        let duration: Double = 1
+        withAnimation(.easeInOut(duration: duration)) {
             self.rate = 100
         }
         list.forEach { ctx in
-            let a = animationPosition[ctx.index]
-            animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 1)
-            posModiftor[ctx.index] = PathPositionAnimatableModifier(a, animationPosition[ctx.index], rate: 0, usePath: ctx.index != list.count - 1)
-            withAnimation(.easeInOut(duration: 2)) {
-                posModiftor[ctx.index] = PathPositionAnimatableModifier(a, animationPosition[ctx.index], rate: 100, usePath: ctx.index != list.count - 1)
+            posModiftor[ctx.index] = PathPositionAnimatableModifier(
+                getPositionByStackIndex(ctx.index+2),
+                getPositionByStackIndex(ctx.index+1),
+                getPositionByStackIndex(ctx.index),
+                rate: 0,
+                
+                ctx: ctx,
+                start: CGPoint(x: 50, y: 50),
+                usePath: ctx.index != list.count - 1)
+            withAnimation(.easeInOut(duration: duration)) {
+                posModiftor[ctx.index] = PathPositionAnimatableModifier(
+                    getPositionByStackIndex(ctx.index+2),
+                    getPositionByStackIndex(ctx.index+1),
+                    getPositionByStackIndex(ctx.index),
+                    rate: 100,
+                    ctx: ctx,
+                    start: CGPoint(x: 50, y: 50),
+                    usePath: ctx.index != list.count - 1)
             }
         }
         topLinkEnd = getPosition(1)
@@ -118,7 +133,7 @@ public class ListNodeContext {
 
     private let hCount = 6
 
-    private var context: StackContext = StackContext()
+    var context: StackContext = StackContext()
 
     init(value: Int, context: StackContext) {
         self.value = value

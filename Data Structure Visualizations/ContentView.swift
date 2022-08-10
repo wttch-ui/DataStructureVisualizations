@@ -13,11 +13,6 @@ struct ContentView: View {
         NavigationView {
             List {
                 NavigationLink( destination:
-                    TestView()
-                , isActive: $isActive, label: {
-                    Text("测试")
-                })
-                NavigationLink( destination:
                                     QueueLinkedListImplementation()
                 , label: {
                     Text("队列 链表实现")

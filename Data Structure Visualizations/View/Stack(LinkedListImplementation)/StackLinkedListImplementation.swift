@@ -63,16 +63,16 @@ struct StackLinkedListImplementation: View {
                 ListNode(context: ctx)
                     .modifier(context.posModiftor[ctx.index])
                     
-                if ctx.index > 0 {
-                    AnimatablePath(
-                        p1: context.getPositionByStackIndex(ctx.index + 2),
-                        p2: context.getPositionByStackIndex(ctx.index + 1),
-                        p3: context.getPositionByStackIndex(ctx.index),
-                        rate: context.rate,
-                        usePath: ctx.index != context.list.count-1)
-                    .stroke(.red, lineWidth: 2)
-                    .frame(geo.size)
-                }
+//                if ctx.index > 0 {
+//                    AnimatablePath(
+//                        p1: context.getPositionByStackIndex(ctx.index + 2),
+//                        p2: context.getPositionByStackIndex(ctx.index + 1),
+//                        p3: context.getPositionByStackIndex(ctx.index),
+//                        rate: context.rate,
+//                        usePath: ctx.index != context.list.count-1)
+//                    .stroke(.green, lineWidth: 2)
+//                    .frame(geo.size)
+//                }
 //                if linkEndIndex >= 0 {
 //                    LinkArrow(
 //                            start: context.animationPosition[ctx.index] + CGPoint(x: 24, y: 0),
