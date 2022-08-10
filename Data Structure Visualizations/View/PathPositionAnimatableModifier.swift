@@ -64,8 +64,10 @@ struct PathPositionAnimatableModifier : AnimatableModifier {
             content.position(
                 curPos
             )
+            if ctx.index != 0 {
                 AnimatablePath(p1: curPos + CGPoint(x: 24, y: 0), p2: targetPos + CGPoint(x: -30, y: 0), usePath: ctx.context.list.count - 1 != ctx.index)
                     .stroke(.green, lineWidth: 2)
+            }
         }
     }
     

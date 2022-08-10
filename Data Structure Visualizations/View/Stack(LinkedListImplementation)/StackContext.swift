@@ -64,6 +64,7 @@ class StackContext: ObservableObject {
     func removeNode() {
         list.removeLast()
         animationPosition.removeLast()
+        posModiftor.removeLast()
     }
 
     ///
@@ -96,7 +97,9 @@ class StackContext: ObservableObject {
                     usePath: ctx.index != list.count - 1)
             }
         }
-        topLinkEnd = getPosition(1)
+        withAnimation(.easeInOut(duration: duration)) {
+            topLinkEnd = getPosition(1)
+        }
     }
     
     ///
@@ -104,15 +107,39 @@ class StackContext: ObservableObject {
     ///
     func popAnimation() {
         list.forEach { ctx in
-            animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 2)
+            posModiftor[ctx.index] = PathPositionAnimatableModifier(
+                getPositionByStackIndex(ctx.index+2),
+                getPositionByStackIndex(ctx.index+1),
+                getPositionByStackIndex(ctx.index),
+                rate: 100,
+                
+                ctx: ctx,
+                start: CGPoint(x: 50, y: 50),
+                usePath: ctx.index != list.count - 1)
         }
-        topLinkEnd = getPosition(0)
+        
+        list.forEach { ctx in
+            withAnimation(.easeInOut(duration: 1)) {
+                posModiftor[ctx.index] = PathPositionAnimatableModifier(
+                    getPositionByStackIndex(ctx.index+2),
+                    getPositionByStackIndex(ctx.index+1),
+                    getPositionByStackIndex(ctx.index),
+                    rate: 0,
+                    ctx: ctx,
+                    start: CGPoint(x: 50, y: 50),
+                    usePath: ctx.index != list.count - 1)
+            }
+        }
+        withAnimation(.easeInOut(duration: 1)) {
+            list.forEach { ctx in
+                animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 2)
+            }
+            topLinkEnd = getPosition(0)
+        }
     }
 
     func onPop() {
-        withAnimation(.easeInOut(duration: 1)) {
-            popAnimation()
-        }
+        popAnimation()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             withAnimation(.easeInOut(duration: 0.5)) {
                 self.topLinkEnd = self.getPosition(1)
