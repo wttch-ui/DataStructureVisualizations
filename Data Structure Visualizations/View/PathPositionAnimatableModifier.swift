@@ -21,7 +21,7 @@ struct PathPositionAnimatableModifier : AnimatableModifier {
     var targetPos: CGPoint
     var ctx: ListNodeContext
     var start: CGPoint
-    
+    var isPop: Bool
     ///
     /// 构造位置路径动画
     /// 可以根据配置自动生成简单折线,
@@ -36,6 +36,7 @@ struct PathPositionAnimatableModifier : AnimatableModifier {
     init(_ p1: CGPoint, _ p2: CGPoint, _ p3: CGPoint, rate: CGFloat = 0,
          ctx: ListNodeContext,
          start: CGPoint,
+         isPop: Bool = false,
          usePath: Bool = true, offset: CGFloat = 40) {
         self.pathAnimationHelper = PathAnimationHelper.create(p1, p2, usePath: usePath)
         self.pathAnimationHelper2 = PathAnimationHelper.create(p2, p3, usePath: usePath)
@@ -44,6 +45,7 @@ struct PathPositionAnimatableModifier : AnimatableModifier {
         self.targetPos = p2
         self.start = start
         self.ctx = ctx
+        self.isPop = isPop
     }
     
     // 动画使用的值
@@ -62,7 +64,7 @@ struct PathPositionAnimatableModifier : AnimatableModifier {
     func body(content: Content) -> some View {
         ZStack {
             content.position(
-                curPos
+                isPop ? targetPos : curPos
             )
             if ctx.index != 0 {
                 AnimatablePath(p1: curPos + CGPoint(x: 24, y: 0), p2: targetPos + CGPoint(x: -30, y: 0), usePath: ctx.context.list.count - 1 != ctx.index)

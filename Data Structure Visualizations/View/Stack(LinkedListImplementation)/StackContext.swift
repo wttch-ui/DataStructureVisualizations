@@ -62,9 +62,9 @@ class StackContext: ObservableObject {
     }
 
     func removeNode() {
+        posModiftor.removeLast()
         list.removeLast()
         animationPosition.removeLast()
-        posModiftor.removeLast()
     }
 
     ///
@@ -107,18 +107,7 @@ class StackContext: ObservableObject {
     ///
     func popAnimation() {
         list.forEach { ctx in
-            posModiftor[ctx.index] = PathPositionAnimatableModifier(
-                getPositionByStackIndex(ctx.index+2),
-                getPositionByStackIndex(ctx.index+1),
-                getPositionByStackIndex(ctx.index),
-                rate: 100,
-                
-                ctx: ctx,
-                start: CGPoint(x: 50, y: 50),
-                usePath: ctx.index != list.count - 1)
-        }
-        
-        list.forEach { ctx in
+            posModiftor[ctx.index].rate = 100
             withAnimation(.easeInOut(duration: 1)) {
                 posModiftor[ctx.index] = PathPositionAnimatableModifier(
                     getPositionByStackIndex(ctx.index+2),
