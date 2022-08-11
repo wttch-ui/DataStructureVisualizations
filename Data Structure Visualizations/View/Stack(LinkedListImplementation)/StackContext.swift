@@ -15,9 +15,6 @@ class StackContext: ObservableObject {
     // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     // 画线和定位的时候会用到该值
     var positionCalculator: PositionCalculator = PositionCalculator()
-    // 动画偏移数组，每个节点都有一个对应的值，用来动画时偏移使用
-    // 考虑不使用偏移，而是直接移动位置，不停的变换位置
-    @Published var animationPosition: [CGPoint] = []
 
     @Published var topLinkEnd: CGPoint
 
@@ -56,7 +53,6 @@ class StackContext: ObservableObject {
     func newNode(_ value: Int) {
         let node = ListNodeContext(value: value, context: self)
         list.append(node)
-        animationPosition.append(positionCalculator[0])
         posModiftor.append(PathPositionAnimatableModifier(positionCalculator[0], positionCalculator[1], positionCalculator[2],
                                                          rate: 0, ctx: node, start: CGPoint(x: 50, y: 50)))
     }
@@ -64,7 +60,6 @@ class StackContext: ObservableObject {
     func removeNode() {
         posModiftor.removeLast()
         list.removeLast()
-        animationPosition.removeLast()
     }
 
     ///
@@ -87,14 +82,7 @@ class StackContext: ObservableObject {
                 start: CGPoint(x: 50, y: 50),
                 usePath: ctx.index != list.count - 1)
             withAnimation(.easeInOut(duration: duration)) {
-                posModiftor[ctx.index] = PathPositionAnimatableModifier(
-                    getPositionByStackIndex(ctx.index+2),
-                    getPositionByStackIndex(ctx.index+1),
-                    getPositionByStackIndex(ctx.index),
-                    rate: 100,
-                    ctx: ctx,
-                    start: CGPoint(x: 50, y: 50),
-                    usePath: ctx.index != list.count - 1)
+                posModiftor[ctx.index].rate = 100
             }
         }
         withAnimation(.easeInOut(duration: duration)) {
@@ -120,9 +108,6 @@ class StackContext: ObservableObject {
             }
         }
         withAnimation(.easeInOut(duration: 1)) {
-            list.forEach { ctx in
-                animationPosition[ctx.index] = getPositionByStackIndex(ctx.index + 2)
-            }
             topLinkEnd = getPosition(0)
         }
     }
@@ -160,16 +145,6 @@ public class ListNodeContext {
     init(value: Int, index: Int) {
         self.value = value
         self.index = index
-    }
-
-    ///
-    /// 获取当前元素的位置
-    ///
-    /// - Returns: 当前元素位置
-    ///
-    func position() -> CGPoint {
-        // 就是正数 0...count - 1
-        context.animationPosition[context.list.count - index - 1]
     }
 
     ///

@@ -49,37 +49,17 @@ struct StackLinkedListImplementation: View {
             PointerView(isNull: context.list.count == 0, text: "Top")
                     .position(x: 32, y: new_value_node_offset_y)
                     .frame(width: 24, height: 24)
-            if context.animationPosition.count >= 1 {
+            if context.list.count >= 1 {
                 LinkArrow(
                         start: CGPoint(x: 32 + 16, y: new_value_node_offset_y),
                         end: context.topLinkEnd + CGPoint(x: -24, y: 0)
                 ).stroke(.red, lineWidth: 3.0)
                         .zIndex(10)
             }
-            // ListNode(value: newNodeValue)
-            //        .position(newNodePos())
             ForEach(context.list) { ctx in
                 // 不然会报一个 状态 nil 的错误
                 ListNode(context: ctx)
                     .modifier(context.posModiftor[ctx.index])
-                    
-//                if ctx.index > 0 {
-//                    AnimatablePath(
-//                        p1: context.getPositionByStackIndex(ctx.index + 2),
-//                        p2: context.getPositionByStackIndex(ctx.index + 1),
-//                        p3: context.getPositionByStackIndex(ctx.index),
-//                        rate: context.rate,
-//                        usePath: ctx.index != context.list.count-1)
-//                    .stroke(.green, lineWidth: 2)
-//                    .frame(geo.size)
-//                }
-//                if linkEndIndex >= 0 {
-//                    LinkArrow(
-//                            start: context.animationPosition[ctx.index] + CGPoint(x: 24, y: 0),
-//                            end: context.animationPosition[linkEndIndex] + CGPoint(x: -24, y: 0)
-//                    ).stroke(.red, lineWidth: 3.0)
-//                            .zIndex(10)
-//                }
             }
         }
                 .offset(y: 16)
