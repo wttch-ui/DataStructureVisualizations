@@ -9,39 +9,23 @@ import SwiftUI
 
 struct StackLinkedListImplementation: View {
     @EnvironmentObject var context: StackContext
-
+    @State var duration: Double = 1.0
     var body: some View {
-        GeometryReader { geo in
+        VStack {
+            ToolBar {
+                Button("新增") { context.onNewNodeClick() }
+                    .disabled(context.changing)
+                if !context.list.isEmpty {
+                    Button("出栈") {
+                        context.onPop()
+                    }
+                    .disabled(context.changing)
+                }
+                Spacer()
+                AnimationSpeedPicker(duration: $context.duration)
+            }
             VStack {
-                HStack {
-                    Button("新增") {
-                        context.newValue = Int(arc4random_uniform(10))
-                        // 新增
-                        withAnimation(.easeInOut(duration: 1)) {
-                            context.newValueOffsetY = new_value_node_offset_y
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            withAnimation(.easeInOut(duration: 0.5)) {
-                                context.topLinkEnd = context.getPosition(0)
-                            }
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                            context.newValueOffsetY = 0
-                            context.newNode(context.newValue!)
-                            context.newValue = nil
-                            context.pushAnimation()
-                            
-                        })
-                    }
-                    .position(x: 40, y: 0)
-                    if !context.list.isEmpty {
-                        Button("出栈") {
-                            context.onPop()
-                        }
-                        .position(x: 40, y: 60)
-                    }
-                }.frame(maxHeight: 100)
-                ZStack(alignment: .topLeading) {
+                GeometryReader { geo in
                     PointerView(isNull: context.list.count == 0, text: "Top")
                         .position(x: 32, y: new_value_node_offset_y)
                         .frame(width: 24, height: 24)
@@ -67,10 +51,9 @@ struct StackLinkedListImplementation: View {
                         
                     }
                 }
-                .frame(width: geo.size.width, height: geo.size.height - 100)
-                .padding(20)
-                .border(.red)
             }
+            .padding(20)
+            .border(.red)
         }
     }
 

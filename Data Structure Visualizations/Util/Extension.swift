@@ -31,3 +31,38 @@ extension View {
         self.frame(width: size.width, height: size.height)
     }
 }
+
+extension Double {
+    ///
+    /// 执行动画, 使用时间为 self
+    /// - Parameter content: 动画执行的内容
+    ///
+    public func animation(_ content: () -> ())  {
+        withAnimation(.easeInOut(duration: self)) {
+            content()
+        }
+    }
+    
+    
+    ///
+    /// 延迟 self 秒后执行给定的闭包
+    /// - Parameter content: 要延迟执行的闭包
+    ///
+    public func asyncAfter(_ content: @escaping () -> ()) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + self) {
+            content()
+        }
+    }
+    
+    ///
+    /// 延迟执行动画,  动画时间为 self, 延迟时间为 delay
+    /// - Parameters:
+    ///   - delay: 延迟时间
+    ///   - content: 动画执行的闭包
+    ///   
+    public func animationAfter(_ delay: Double, _ content: @escaping () -> ()) {
+        delay.asyncAfter {
+            self.animation(content)
+        }
+    }
+}

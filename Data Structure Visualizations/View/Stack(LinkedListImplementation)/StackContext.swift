@@ -14,7 +14,7 @@ class StackContext: ObservableObject {
     // 记录每个单元格的位置信息，每次新增的时候都在后面添加一个位置，根据规则直接往后排
     // 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     // 画线和定位的时候会用到该值
-    var positionCalculator: PositionCalculator = PositionCalculator()
+    var positionCalculator: PositionCalculator
 
     @Published var topLinkEnd: CGPoint
 
@@ -28,12 +28,18 @@ class StackContext: ObservableObject {
     var posModiftor: [PathPositionAnimatableModifier] = []
     @Published
     var rate: CGFloat = 0
-
-    init(_ columnSize: Int = 6) {
+    @Published
+    var duration: Double = 1.0
+    
+    @Published
+    var changing: Bool = false
+    
+    init(_ columnSize: Int = 10) {
         self.columnSize = columnSize
+        positionCalculator = PositionCalculator(columnSize)
         topLinkEnd = positionCalculator[0]
     }
-
+    
     ///
     /// 第 i 的元素的位置在改数组的 list.count - i - 1 的位置
     /// - Parameter index:
@@ -42,21 +48,36 @@ class StackContext: ObservableObject {
         positionCalculator[list.count - index + 1]
     }
 
-    func getPosition(_ index: Int) -> CGPoint {
-        positionCalculator[index]
-    }
+    func onNewNodeClick(_ value: Int? = nil) {
+        changing(duration * 2)
+        let newValue = value ?? Int(arc4random_uniform(10))
+        self.newValue = newValue
+        // 新增
+        duration.animation {
+            newValueOffsetY = new_value_node_offset_y
+        }
 
-    ///
-    /// 新增一个数据节点
-    ///
-    /// - Parameter value: 数据节点的值
-    func newNode(_ value: Int) {
-        let node = ListNodeContext(value: value, context: self)
-        list.append(node)
-        posModiftor.append(PathPositionAnimatableModifier(positionCalculator[0], positionCalculator[1], positionCalculator[2],
-                                                         rate: 0, ctx: node, start: CGPoint(x: 50, y: 50)))
+        (duration / 2).animationAfter(duration / 2, topLinkReset)
+        
+        duration.asyncAfter {
+            self.newValueOffsetY = 0
+            self.newValue = nil
+            
+            let node = ListNodeContext(value: newValue, context: self)
+            self.list.append(node)
+            self.posModiftor.append(PathPositionAnimatableModifier(self.positionCalculator[0], self.positionCalculator[1], self.positionCalculator[2],
+                                                             rate: 0, ctx: node, start: CGPoint(x: 50, y: 50)))
+            self.pushAnimation()
+        }
     }
-
+    
+    func changing(_ seconds: Double) {
+        changing = true
+        seconds.asyncAfter {
+            self.changing = false
+        }
+    }
+    
     func removeNode() {
         posModiftor.removeLast()
         list.removeLast()
@@ -67,8 +88,7 @@ class StackContext: ObservableObject {
     ///
     func pushAnimation() {
         self.rate = 0
-        let duration: Double = 1
-        withAnimation(.easeInOut(duration: duration)) {
+        duration.animation {
             self.rate = 100
         }
         list.forEach { ctx in
@@ -85,9 +105,7 @@ class StackContext: ObservableObject {
                 posModiftor[ctx.index].rate = 100
             }
         }
-        withAnimation(.easeInOut(duration: duration)) {
-            topLinkEnd = getPosition(1)
-        }
+        duration.animation(topLink)
     }
     
     ///
@@ -96,7 +114,7 @@ class StackContext: ObservableObject {
     func popAnimation() {
         list.forEach { ctx in
             posModiftor[ctx.index].rate = 100
-            withAnimation(.easeInOut(duration: 1)) {
+            withAnimation(.easeInOut(duration: duration)) {
                 posModiftor[ctx.index] = PathPositionAnimatableModifier(
                     getPositionByStackIndex(ctx.index+2),
                     getPositionByStackIndex(ctx.index+1),
@@ -107,19 +125,23 @@ class StackContext: ObservableObject {
                     usePath: ctx.index != list.count - 1)
             }
         }
-        withAnimation(.easeInOut(duration: 1)) {
-            topLinkEnd = getPosition(0)
-        }
+        duration.animation(self.topLinkReset)
     }
 
     func onPop() {
         popAnimation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            withAnimation(.easeInOut(duration: 0.5)) {
-                self.topLinkEnd = self.getPosition(1)
-            }
+        duration.asyncAfter {
+            (self.duration / 2).animation(self.topLink)
             self.removeNode()
         }
+    }
+    
+    private func topLinkReset() {
+        topLinkEnd = self.positionCalculator[0]
+    }
+    
+    private func topLink() {
+        topLinkEnd = self.positionCalculator[1]
     }
 }
 

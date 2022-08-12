@@ -35,6 +35,6 @@ class PositionCalculator {
                     + node_size_width * node_right_rate / 2, y: new_value_node_offset_y)
         }
         let newIndex = index - 1
-        return CGPoint(x: CGFloat(newIndex % 6) * 100.0 + 100, y: CGFloat(newIndex / 6) * 80 + 240)
+        return CGPoint(x: CGFloat(newIndex % columnSize) * 100.0 + 100, y: CGFloat(newIndex / columnSize) * 80 + 240)
     }
 }
