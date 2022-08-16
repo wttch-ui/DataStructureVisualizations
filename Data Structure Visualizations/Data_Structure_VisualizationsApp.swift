@@ -13,9 +13,10 @@ struct Data_Structure_VisualizationsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            // ContentView()
             // StackArrayImplementation()
             // SampleViewC()
+            AVLTreeView()
         }
     }
 }

@@ -13,6 +13,12 @@ struct ContentView: View {
         NavigationView {
             List {
                 NavigationLink( destination:
+                                    AVLTreeView()
+                , isActive: $isActive,
+                label: {
+                    Text("AVL 树")
+                })
+                NavigationLink( destination:
                                     QueueLinkedListImplementation()
                 , label: {
                     Text("队列 链表实现")
@@ -30,7 +36,7 @@ struct ContentView: View {
                 }
             }
         }
-                .environmentObject(StackContext())
+        .environmentObject(StackContext())
     }
 }
 
